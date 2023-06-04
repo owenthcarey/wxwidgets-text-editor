@@ -3,7 +3,7 @@
 
 class MyApp : public wxApp {
 public:
-    virtual bool OnInit();
+    bool OnInit() override;
 };
 
 class MyFrame : public wxFrame {
@@ -24,11 +24,12 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
                 EVT_MENU(wxID_EXIT, MyFrame::OnExit)
 wxEND_EVENT_TABLE()
 
-IMPLEMENT_APP(MyApp)
+// This defines the equivalent of main() for the current platform.
+wxIMPLEMENT_APP(MyApp);
 
 bool MyApp::OnInit() {
     MyFrame *frame = new MyFrame();
-    frame->Show(true);
+    frame->Show();
     return true;
 }
 
