@@ -54,20 +54,20 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
                 EVT_MENU(wxID_OPEN, MyFrame::OnOpen)
                 EVT_MENU(wxID_SAVE, MyFrame::OnSave)
                 EVT_MENU(wxID_EXIT, MyFrame::OnExit)
-                EVT_MENU(ID_Font, MyFrame::OnFont)
-                EVT_MENU(ID_Color, MyFrame::OnColor)
-                EVT_MENU(ID_BGColor, MyFrame::OnBGColor)
-                EVT_MENU(ID_Bold, MyFrame::OnBold)
-                EVT_MENU(ID_Italic, MyFrame::OnItalic)
-                EVT_MENU(ID_Underline, MyFrame::OnUnderline)
-                EVT_MENU(ID_LeftAlign, MyFrame::OnLeftAlign)
-                EVT_MENU(ID_RightAlign, MyFrame::OnRightAlign)
-                EVT_MENU(ID_CenterAlign, MyFrame::OnCenterAlign)
-                EVT_MENU(ID_Justify, MyFrame::OnJustify)
-                EVT_MENU(ID_LineSpacing, MyFrame::OnLineSpacing)
-                EVT_MENU(ID_ParagraphSpacing, MyFrame::OnParagraphSpacing)
-                EVT_MENU(ID_Bullet, MyFrame::OnBullet)
-                EVT_MENU(ID_Number, MyFrame::OnNumber)
+                EVT_TOOL(ID_Font, MyFrame::OnFont)
+                EVT_TOOL(ID_Color, MyFrame::OnColor)
+                EVT_TOOL(ID_BGColor, MyFrame::OnBGColor)
+                EVT_TOOL(ID_Bold, MyFrame::OnBold)
+                EVT_TOOL(ID_Italic, MyFrame::OnItalic)
+                EVT_TOOL(ID_Underline, MyFrame::OnUnderline)
+                EVT_TOOL(ID_LeftAlign, MyFrame::OnLeftAlign)
+                EVT_TOOL(ID_RightAlign, MyFrame::OnRightAlign)
+                EVT_TOOL(ID_CenterAlign, MyFrame::OnCenterAlign)
+                EVT_TOOL(ID_Justify, MyFrame::OnJustify)
+                EVT_TOOL(ID_LineSpacing, MyFrame::OnLineSpacing)
+                EVT_TOOL(ID_ParagraphSpacing, MyFrame::OnParagraphSpacing)
+                EVT_TOOL(ID_Bullet, MyFrame::OnBullet)
+                EVT_TOOL(ID_Number, MyFrame::OnNumber)
 wxEND_EVENT_TABLE()
 
 // This defines the equivalent of main() for the current platform.
@@ -81,8 +81,6 @@ bool MyApp::OnInit() {
 
 MyFrame::MyFrame() : wxFrame(NULL, wxID_ANY, "wxWidgets Text Editor",
                              wxDefaultPosition, wxSize(800, 600)) {
-//    textCtrl = new wxTextCtrl(this, -1, "", wxDefaultPosition, wxDefaultSize,
-//                              wxTE_MULTILINE | wxTE_RICH2);
     textCtrl = new wxRichTextCtrl(this, -1, "", wxDefaultPosition, wxDefaultSize,
                                   wxTE_MULTILINE | wxTE_RICH2);
     textCtrl->SetFont(wxFont(12, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL,
@@ -96,22 +94,39 @@ MyFrame::MyFrame() : wxFrame(NULL, wxID_ANY, "wxWidgets Text Editor",
     menuBar->Append(menuFile, "&File");
     SetMenuBar(menuBar);
 
-    wxMenu *menuFormat = new wxMenu;
-    menuFormat->Append(ID_Font, "&Font");
-    menuFormat->Append(ID_Color, "&Color");
-    menuFormat->Append(ID_BGColor, "&Background Color");
-    menuFormat->Append(ID_Bold, "&Bold");
-    menuFormat->Append(ID_Italic, "&Italic");
-    menuFormat->Append(ID_Underline, "&Underline");
-    menuFormat->Append(ID_LeftAlign, "&Left Align");
-    menuFormat->Append(ID_RightAlign, "&Right Align");
-    menuFormat->Append(ID_CenterAlign, "&Center Align");
-    menuFormat->Append(ID_Justify, "&Justify");
-    menuFormat->Append(ID_LineSpacing, "&Line Spacing");
-    menuFormat->Append(ID_ParagraphSpacing, "&Paragraph Spacing");
-    menuFormat->Append(ID_Bullet, "&Bullet");
-    menuFormat->Append(ID_Number, "&Number");
-    menuBar->Append(menuFormat, "&Format");
+    // Create a 16x16 image filled with red pixels.
+    wxImage image(16, 16, true);
+    image.InitAlpha();
+    unsigned char *data = image.GetData();
+    unsigned char *alpha = image.GetAlpha();
+    for (int y = 0; y < 16; ++y) {
+        for (int x = 0; x < 16; ++x) {
+            int index = (y * 16 + x) * 3;
+            data[index] = 255;    // red channel
+            data[index + 1] = 0;  // green channel
+            data[index + 2] = 0;  // blue channel
+            alpha[y * 16 + x] = 255;  // fully opaque
+        }
+    }
+    wxBitmap bitmap(image);
+
+    // Create a toolbar and add items.
+    wxToolBar *toolbar = CreateToolBar();
+    toolbar->AddTool(ID_Font, wxT("Font"), bitmap, wxT("Change font"));
+    toolbar->AddTool(ID_Color, wxT("Color"), bitmap, wxT("Change color"));
+    toolbar->AddTool(ID_BGColor, wxT("Background Color"), bitmap, wxT("Change background color"));
+    toolbar->AddTool(ID_Bold, wxT("Bold"), bitmap, wxT("Bold text"));
+    toolbar->AddTool(ID_Italic, wxT("Italic"), bitmap, wxT("Italicize text"));
+    toolbar->AddTool(ID_Underline, wxT("Underline"), bitmap, wxT("Underline text"));
+    toolbar->AddTool(ID_LeftAlign, wxT("Left Align"), bitmap, wxT("Left align text"));
+    toolbar->AddTool(ID_RightAlign, wxT("Right Align"), bitmap, wxT("Right align text"));
+    toolbar->AddTool(ID_CenterAlign, wxT("Center Align"), bitmap, wxT("Center align text"));
+    toolbar->AddTool(ID_Justify, wxT("Justify"), bitmap, wxT("Justify text"));
+    toolbar->AddTool(ID_LineSpacing, wxT("Line Spacing"), bitmap, wxT("Change line spacing"));
+    toolbar->AddTool(ID_ParagraphSpacing, wxT("Paragraph Spacing"), bitmap, wxT("Change paragraph spacing"));
+    toolbar->AddTool(ID_Bullet, wxT("Bullet"), bitmap, wxT("Add bullet"));
+    toolbar->AddTool(ID_Number, wxT("Number"), bitmap, wxT("Add number"));
+    toolbar->Realize();
 }
 
 void MyFrame::OnOpen(wxCommandEvent &WXUNUSED(event)) {
