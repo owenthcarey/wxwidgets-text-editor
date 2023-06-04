@@ -1,0 +1,9 @@
+{
+  "name": "wxwidgets-text-editor",
+  "version-string": "0.1.0",
+  "homepage": "https://github.com/owenthcarey/wxwidgets-text-editor",
+  "description": "A simple text editor built with wxWidgets",
+  "dependencies": [
+    "wxwidgets"
+  ]
+}
