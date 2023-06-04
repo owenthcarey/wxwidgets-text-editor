@@ -1,6 +1,10 @@
 #include <wx/wx.h>
 #include <wx/file.h>
 #include <wx/richtext/richtextctrl.h>
+#include <wx/colourdata.h>
+#include <wx/colordlg.h>
+#include <wx/fontdlg.h>
+#include <wx/choice.h>
 
 class MyApp : public wxApp {
 public:
@@ -64,7 +68,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
                 EVT_TOOL(ID_RightAlign, MyFrame::OnRightAlign)
                 EVT_TOOL(ID_CenterAlign, MyFrame::OnCenterAlign)
                 EVT_TOOL(ID_Justify, MyFrame::OnJustify)
-                EVT_TOOL(ID_LineSpacing, MyFrame::OnLineSpacing)
+                EVT_CHOICE(ID_LineSpacing, MyFrame::OnLineSpacing)
                 EVT_TOOL(ID_ParagraphSpacing, MyFrame::OnParagraphSpacing)
                 EVT_TOOL(ID_Bullet, MyFrame::OnBullet)
                 EVT_TOOL(ID_Number, MyFrame::OnNumber)
@@ -122,7 +126,13 @@ MyFrame::MyFrame() : wxFrame(NULL, wxID_ANY, "wxWidgets Text Editor",
     toolbar->AddTool(ID_RightAlign, wxT("Right Align"), bitmap, wxT("Right align text"));
     toolbar->AddTool(ID_CenterAlign, wxT("Center Align"), bitmap, wxT("Center align text"));
     toolbar->AddTool(ID_Justify, wxT("Justify"), bitmap, wxT("Justify text"));
-    toolbar->AddTool(ID_LineSpacing, wxT("Line Spacing"), bitmap, wxT("Change line spacing"));
+//    toolbar->AddTool(ID_LineSpacing, wxT("Line Spacing"), bitmap, wxT("Change line spacing"));
+    wxArrayString lineSpacingChoices;
+    for (double i = 0.5; i <= 2.0; i += 0.1) {
+        lineSpacingChoices.Add(wxString::Format("%.1f", i));
+    }
+    wxChoice* lineSpacingDropdown = new wxChoice(toolbar, ID_LineSpacing, wxDefaultPosition, wxDefaultSize, lineSpacingChoices);
+    toolbar->AddControl(lineSpacingDropdown, wxT("Change line spacing"));
     toolbar->AddTool(ID_ParagraphSpacing, wxT("Paragraph Spacing"), bitmap, wxT("Change paragraph spacing"));
     toolbar->AddTool(ID_Bullet, wxT("Bullet"), bitmap, wxT("Add bullet"));
     toolbar->AddTool(ID_Number, wxT("Number"), bitmap, wxT("Add number"));
@@ -161,57 +171,109 @@ void MyFrame::OnExit(wxCommandEvent &WXUNUSED(event)) {
 }
 
 void MyFrame::OnFont(wxCommandEvent &event) {
-    // TODO
+    wxFontData data;
+    data.SetInitialFont(textCtrl->GetFont());
+    wxFontDialog dialog(this, data);
+    if (dialog.ShowModal() == wxID_OK) {
+        wxFontData retData = dialog.GetFontData();
+        wxFont font = retData.GetChosenFont();
+        wxTextAttr attr = textCtrl->GetDefaultStyle();
+        attr.SetFont(font);
+        textCtrl->SetDefaultStyle(attr);
+    }
 }
 
 void MyFrame::OnColor(wxCommandEvent &event) {
-    // TODO
+    wxColourDialog dialog(this);
+    if (dialog.ShowModal() == wxID_OK) {
+        wxColourData data = dialog.GetColourData();
+        wxColour color = data.GetColour();
+        wxTextAttr attr = textCtrl->GetDefaultStyle();
+        attr.SetTextColour(color);
+        textCtrl->SetDefaultStyle(attr);
+    }
 }
 
 void MyFrame::OnBGColor(wxCommandEvent &event) {
-    // TODO
+    wxColourDialog dialog(this);
+    if (dialog.ShowModal() == wxID_OK) {
+        wxColourData data = dialog.GetColourData();
+        wxColour color = data.GetColour();
+        wxTextAttr attr = textCtrl->GetDefaultStyle();
+        attr.SetBackgroundColour(color);
+        textCtrl->SetDefaultStyle(attr);
+    }
 }
 
 void MyFrame::OnBold(wxCommandEvent &event) {
-    // TODO
+    wxTextAttr style = textCtrl->GetDefaultStyle();
+    if(style.GetFontWeight() != wxFONTWEIGHT_BOLD) {
+        style.SetFontWeight(wxFONTWEIGHT_BOLD);
+    } else {
+        style.SetFontWeight(wxFONTWEIGHT_NORMAL);
+    }
+    textCtrl->SetDefaultStyle(style);
 }
 
 void MyFrame::OnItalic(wxCommandEvent &event) {
-    // TODO
+    wxTextAttr style = textCtrl->GetDefaultStyle();
+    if(style.GetFontStyle() != wxFONTSTYLE_ITALIC) {
+        style.SetFontStyle(wxFONTSTYLE_ITALIC);
+    } else {
+        style.SetFontStyle(wxFONTSTYLE_NORMAL);
+    }
+    textCtrl->SetDefaultStyle(style);
 }
 
 void MyFrame::OnUnderline(wxCommandEvent &event) {
-    // TODO
+    wxTextAttr style = textCtrl->GetDefaultStyle();
+    if(!style.GetFontUnderlined()) {
+        style.SetFontUnderlined(true);
+    } else {
+        style.SetFontUnderlined(false);
+    }
+    textCtrl->SetDefaultStyle(style);
 }
 
 void MyFrame::OnLeftAlign(wxCommandEvent &event) {
-    // TODO
+    wxTextAttr style = textCtrl->GetDefaultStyle();
+    style.SetAlignment(wxTEXT_ALIGNMENT_LEFT);
+    textCtrl->SetDefaultStyle(style);
 }
 
 void MyFrame::OnRightAlign(wxCommandEvent &event) {
-    // TODO
+    wxTextAttr style = textCtrl->GetDefaultStyle();
+    style.SetAlignment(wxTEXT_ALIGNMENT_RIGHT);
+    textCtrl->SetDefaultStyle(style);
 }
 
 void MyFrame::OnCenterAlign(wxCommandEvent &event) {
-    // TODO
+    wxTextAttr style = textCtrl->GetDefaultStyle();
+    style.SetAlignment(wxTEXT_ALIGNMENT_CENTER);
+    textCtrl->SetDefaultStyle(style);
 }
 
 void MyFrame::OnJustify(wxCommandEvent &event) {
-    // TODO
+    wxTextAttr style = textCtrl->GetDefaultStyle();
+    style.SetAlignment(wxTEXT_ALIGNMENT_JUSTIFIED);
+    textCtrl->SetDefaultStyle(style);
 }
 
 void MyFrame::OnLineSpacing(wxCommandEvent &event) {
-    // TODO
+    wxChoice* lineSpacingDropdown = (wxChoice*)FindWindow(ID_LineSpacing);
+    wxString lineSpacingStr = lineSpacingDropdown->GetStringSelection();
+    double lineSpacing = wxAtof(lineSpacingStr);
+    wxLogMessage("Line spacing changed to: %f", lineSpacing);
 }
 
 void MyFrame::OnParagraphSpacing(wxCommandEvent &event) {
-    // TODO
+    wxLogMessage("OnParagraphSpacing event triggered");
 }
 
 void MyFrame::OnBullet(wxCommandEvent &event) {
-    // TODO
+    wxLogMessage("OnBullet event triggered");
 }
 
 void MyFrame::OnNumber(wxCommandEvent &event) {
-    // TODO
+    wxLogMessage("OnNumber event triggered");
 }
