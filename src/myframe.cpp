@@ -56,18 +56,28 @@ MyFrame::MyFrame() : wxFrame(NULL, wxID_ANY, "wxWidgets Text Editor",
     }
     wxBitmap bitmap(image);
 
+    // Load the icon bitmaps from files
+    wxBitmap boldBitmap("../assets/bold@2x.png", wxBITMAP_TYPE_PNG);
+    wxBitmap italicBitmap("../assets/italic@2x.png", wxBITMAP_TYPE_PNG);
+    wxBitmap listBulletBitmap("../assets/list.bullet@2x.png", wxBITMAP_TYPE_PNG);
+    wxBitmap textAlignLeftBitmap("../assets/text.alignleft@2x.png", wxBITMAP_TYPE_PNG);
+    wxBitmap textAlignRightBitmap("../assets/text.alignright@2x.png", wxBITMAP_TYPE_PNG);
+    wxBitmap textAlignCenterBitmap("../assets/text.aligncenter@2x.png", wxBITMAP_TYPE_PNG);
+    wxBitmap textJustifyBitmap("../assets/text.justify@2x.png", wxBITMAP_TYPE_PNG);
+    wxBitmap underlineBitmap("../assets/underline@2x.png", wxBITMAP_TYPE_PNG);
+
     // Create a toolbar and add items.
     wxToolBar *toolbar = CreateToolBar();
     toolbar->AddTool(ID_Font, wxT("Font"), bitmap, wxT("Change font"));
     toolbar->AddTool(ID_Color, wxT("Color"), bitmap, wxT("Change color"));
     toolbar->AddTool(ID_BGColor, wxT("Background Color"), bitmap, wxT("Change background color"));
-    toolbar->AddTool(ID_Bold, wxT("Bold"), bitmap, wxT("Bold text"));
-    toolbar->AddTool(ID_Italic, wxT("Italic"), bitmap, wxT("Italicize text"));
-    toolbar->AddTool(ID_Underline, wxT("Underline"), bitmap, wxT("Underline text"));
-    toolbar->AddTool(ID_LeftAlign, wxT("Left Align"), bitmap, wxT("Left align text"));
-    toolbar->AddTool(ID_RightAlign, wxT("Right Align"), bitmap, wxT("Right align text"));
-    toolbar->AddTool(ID_CenterAlign, wxT("Center Align"), bitmap, wxT("Center align text"));
-    toolbar->AddTool(ID_Justify, wxT("Justify"), bitmap, wxT("Justify text"));
+    toolbar->AddTool(ID_Bold, wxT("Bold"), boldBitmap, wxT("Bold text"));
+    toolbar->AddTool(ID_Italic, wxT("Italic"), italicBitmap, wxT("Italicize text"));
+    toolbar->AddTool(ID_Underline, wxT("Underline"), underlineBitmap, wxT("Underline text"));
+    toolbar->AddTool(ID_LeftAlign, wxT("Left Align"), textAlignLeftBitmap, wxT("Left align text"));
+    toolbar->AddTool(ID_RightAlign, wxT("Right Align"), textAlignRightBitmap, wxT("Right align text"));
+    toolbar->AddTool(ID_CenterAlign, wxT("Center Align"), textAlignCenterBitmap, wxT("Center align text"));
+    toolbar->AddTool(ID_Justify, wxT("Justify"), textJustifyBitmap, wxT("Justify text"));
 //    toolbar->AddTool(ID_LineSpacing, wxT("Line Spacing"), bitmap, wxT("Change line spacing"));
     wxArrayString lineSpacingChoices;
     for (double i = 0.5; i <= 2.0; i += 0.1) {
@@ -76,7 +86,7 @@ MyFrame::MyFrame() : wxFrame(NULL, wxID_ANY, "wxWidgets Text Editor",
     wxChoice* lineSpacingDropdown = new wxChoice(toolbar, ID_LineSpacing, wxDefaultPosition, wxDefaultSize, lineSpacingChoices);
     toolbar->AddControl(lineSpacingDropdown, wxT("Change line spacing"));
     toolbar->AddTool(ID_ParagraphSpacing, wxT("Paragraph Spacing"), bitmap, wxT("Change paragraph spacing"));
-    toolbar->AddTool(ID_Bullet, wxT("Bullet"), bitmap, wxT("Add bullet"));
+    toolbar->AddTool(ID_Bullet, wxT("Bullet"), listBulletBitmap, wxT("Add bullet"));
     toolbar->AddTool(ID_Number, wxT("Number"), bitmap, wxT("Add number"));
     toolbar->Realize();
 }
