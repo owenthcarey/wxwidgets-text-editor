@@ -12,6 +12,9 @@
 #include <wx/colordlg.h>
 #include <wx/fontdlg.h>
 #include <wx/choice.h>
+#include <wx/dirctrl.h>
+#include <wx/dir.h>
+//#include <wx/filepicker.h>
 
 // The frame that contains the main part of the application.
 class MyFrame : public wxFrame {
@@ -32,9 +35,9 @@ public:
     void OnCenterAlign(wxCommandEvent &event);
     void OnJustify(wxCommandEvent &event);
     void OnLineSpacing(wxCommandEvent &event);
-    void OnParagraphSpacing(wxCommandEvent &event);
     void OnBullet(wxCommandEvent &event);
-    void OnNumber(wxCommandEvent &event);
+    wxGenericDirCtrl *dirCtrl;
+    void OnDirItemSelect(wxCommandEvent &event);
     // Define IDs for custom events
     enum {
         ID_Font = 101,
@@ -48,9 +51,7 @@ public:
         ID_CenterAlign,
         ID_Justify,
         ID_LineSpacing,
-        ID_ParagraphSpacing,
-        ID_Bullet,
-        ID_Number
+        ID_Bullet
     };
 
 private:

@@ -19,9 +19,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
                 EVT_TOOL(ID_CenterAlign, MyFrame::OnCenterAlign)
                 EVT_TOOL(ID_Justify, MyFrame::OnJustify)
                 EVT_CHOICE(ID_LineSpacing, MyFrame::OnLineSpacing)
-                EVT_TOOL(ID_ParagraphSpacing, MyFrame::OnParagraphSpacing)
                 EVT_TOOL(ID_Bullet, MyFrame::OnBullet)
-                EVT_TOOL(ID_Number, MyFrame::OnNumber)
 wxEND_EVENT_TABLE()
 
 // The constructor for MyFrame.
@@ -85,10 +83,16 @@ MyFrame::MyFrame() : wxFrame(NULL, wxID_ANY, "wxWidgets Text Editor",
     }
     wxChoice* lineSpacingDropdown = new wxChoice(toolbar, ID_LineSpacing, wxDefaultPosition, wxDefaultSize, lineSpacingChoices);
     toolbar->AddControl(lineSpacingDropdown, wxT("Change line spacing"));
-    toolbar->AddTool(ID_ParagraphSpacing, wxT("Paragraph Spacing"), bitmap, wxT("Change paragraph spacing"));
     toolbar->AddTool(ID_Bullet, wxT("Bullet"), listBulletBitmap, wxT("Add bullet"));
-    toolbar->AddTool(ID_Number, wxT("Number"), bitmap, wxT("Add number"));
     toolbar->Realize();
+
+    dirCtrl = new wxGenericDirCtrl(this, wxID_ANY, wxGetHomeDir(), wxDefaultPosition, wxSize(200, 600),
+                                   wxDIRCTRL_DEFAULT_STYLE | wxSUNKEN_BORDER);
+    dirCtrl->Bind(wxEVT_DIRCTRL_SELECTIONCHANGED, &MyFrame::OnDirItemSelect, this);
+    wxBoxSizer *sizer = new wxBoxSizer(wxHORIZONTAL);
+    sizer->Add(dirCtrl, 0, wxEXPAND);
+    sizer->Add(textCtrl, 1, wxEXPAND);
+    SetSizer(sizer);
 }
 
 void MyFrame::OnOpen(wxCommandEvent &WXUNUSED(event)) {
@@ -127,33 +131,30 @@ void MyFrame::OnFont(wxCommandEvent &event) {
     data.SetInitialFont(textCtrl->GetFont());
     wxFontDialog dialog(this, data);
     if (dialog.ShowModal() == wxID_OK) {
-        wxFontData retData = dialog.GetFontData();
-        wxFont font = retData.GetChosenFont();
-        wxTextAttr attr = textCtrl->GetDefaultStyle();
-        attr.SetFont(font);
-        textCtrl->SetDefaultStyle(attr);
+        wxFont font = dialog.GetFontData().GetChosenFont();
+        wxTextAttr style = textCtrl->GetDefaultStyle();
+        style.SetFont(font);
+        textCtrl->SetDefaultStyle(style);
     }
 }
 
 void MyFrame::OnColor(wxCommandEvent &event) {
     wxColourDialog dialog(this);
     if (dialog.ShowModal() == wxID_OK) {
-        wxColourData data = dialog.GetColourData();
-        wxColour color = data.GetColour();
-        wxTextAttr attr = textCtrl->GetDefaultStyle();
-        attr.SetTextColour(color);
-        textCtrl->SetDefaultStyle(attr);
+        wxColour color = dialog.GetColourData().GetColour();
+        wxTextAttr style = textCtrl->GetDefaultStyle();
+        style.SetTextColour(color);
+        textCtrl->SetDefaultStyle(style);
     }
 }
 
 void MyFrame::OnBGColor(wxCommandEvent &event) {
     wxColourDialog dialog(this);
     if (dialog.ShowModal() == wxID_OK) {
-        wxColourData data = dialog.GetColourData();
-        wxColour color = data.GetColour();
-        wxTextAttr attr = textCtrl->GetDefaultStyle();
-        attr.SetBackgroundColour(color);
-        textCtrl->SetDefaultStyle(attr);
+        wxColour color = dialog.GetColourData().GetColour();
+        wxTextAttr style = textCtrl->GetDefaultStyle();
+        style.SetBackgroundColour(color);
+        textCtrl->SetDefaultStyle(style);
     }
 }
 
@@ -218,14 +219,21 @@ void MyFrame::OnLineSpacing(wxCommandEvent &event) {
     wxLogMessage("Line spacing changed to: %f", lineSpacing);
 }
 
-void MyFrame::OnParagraphSpacing(wxCommandEvent &event) {
-    wxLogMessage("OnParagraphSpacing event triggered");
-}
-
 void MyFrame::OnBullet(wxCommandEvent &event) {
     wxLogMessage("OnBullet event triggered");
 }
 
-void MyFrame::OnNumber(wxCommandEvent &event) {
-    wxLogMessage("OnNumber event triggered");
+void MyFrame::OnDirItemSelect(wxCommandEvent &event) {
+    wxString path = dirCtrl->GetPath();
+    if(wxDir::Exists(path)){
+        return;
+    }
+    wxFile file;
+    if (file.Open(path)) {
+        wxString str;
+        file.ReadAll(&str);
+        textCtrl->SetValue(str);
+    } else {
+        wxLogMessage("Failed to open file: %s", path);
+    }
 }
