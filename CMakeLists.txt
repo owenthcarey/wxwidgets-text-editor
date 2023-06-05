@@ -8,7 +8,7 @@ project(wxwidgets_text_editor)
 set(CMAKE_CXX_STANDARD 23)
 
 # Find the wxWidgets library
-find_package(wxWidgets REQUIRED COMPONENTS net core base richtext html xml)
+find_package(wxWidgets REQUIRED COMPONENTS net core base richtext html xml stc)
 include(${wxWidgets_USE_FILE})
 
 # Add your executable

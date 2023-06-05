@@ -25,8 +25,9 @@ wxEND_EVENT_TABLE()
 // The constructor for MyFrame.
 MyFrame::MyFrame() : wxFrame(NULL, wxID_ANY, "wxWidgets Text Editor",
                              wxDefaultPosition, wxSize(800, 600)) {
-    textCtrl = new wxRichTextCtrl(this, -1, "", wxDefaultPosition, wxDefaultSize,
-                                  wxTE_MULTILINE | wxTE_RICH2);
+    textCtrl = new wxStyledTextCtrl(this, wxID_ANY, wxDefaultPosition,
+                                    wxDefaultSize,
+                                    wxTE_MULTILINE);
     textCtrl->SetFont(wxFont(12, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL,
                              wxFONTWEIGHT_NORMAL));
     wxMenu *menuFile = new wxMenu;
@@ -57,38 +58,56 @@ MyFrame::MyFrame() : wxFrame(NULL, wxID_ANY, "wxWidgets Text Editor",
     // Load the icon bitmaps from files
     wxBitmap boldBitmap("../assets/bold@2x.png", wxBITMAP_TYPE_PNG);
     wxBitmap italicBitmap("../assets/italic@2x.png", wxBITMAP_TYPE_PNG);
-    wxBitmap listBulletBitmap("../assets/list.bullet@2x.png", wxBITMAP_TYPE_PNG);
-    wxBitmap textAlignLeftBitmap("../assets/text.alignleft@2x.png", wxBITMAP_TYPE_PNG);
-    wxBitmap textAlignRightBitmap("../assets/text.alignright@2x.png", wxBITMAP_TYPE_PNG);
-    wxBitmap textAlignCenterBitmap("../assets/text.aligncenter@2x.png", wxBITMAP_TYPE_PNG);
-    wxBitmap textJustifyBitmap("../assets/text.justify@2x.png", wxBITMAP_TYPE_PNG);
+    wxBitmap listBulletBitmap("../assets/list.bullet@2x.png",
+                              wxBITMAP_TYPE_PNG);
+    wxBitmap textAlignLeftBitmap("../assets/text.alignleft@2x.png",
+                                 wxBITMAP_TYPE_PNG);
+    wxBitmap textAlignRightBitmap("../assets/text.alignright@2x.png",
+                                  wxBITMAP_TYPE_PNG);
+    wxBitmap textAlignCenterBitmap("../assets/text.aligncenter@2x.png",
+                                   wxBITMAP_TYPE_PNG);
+    wxBitmap textJustifyBitmap("../assets/text.justify@2x.png",
+                               wxBITMAP_TYPE_PNG);
     wxBitmap underlineBitmap("../assets/underline@2x.png", wxBITMAP_TYPE_PNG);
 
     // Create a toolbar and add items.
     wxToolBar *toolbar = CreateToolBar();
     toolbar->AddTool(ID_Font, wxT("Font"), bitmap, wxT("Change font"));
     toolbar->AddTool(ID_Color, wxT("Color"), bitmap, wxT("Change color"));
-    toolbar->AddTool(ID_BGColor, wxT("Background Color"), bitmap, wxT("Change background color"));
+    toolbar->AddTool(ID_BGColor, wxT("Background Color"), bitmap,
+                     wxT("Change background color"));
     toolbar->AddTool(ID_Bold, wxT("Bold"), boldBitmap, wxT("Bold text"));
-    toolbar->AddTool(ID_Italic, wxT("Italic"), italicBitmap, wxT("Italicize text"));
-    toolbar->AddTool(ID_Underline, wxT("Underline"), underlineBitmap, wxT("Underline text"));
-    toolbar->AddTool(ID_LeftAlign, wxT("Left Align"), textAlignLeftBitmap, wxT("Left align text"));
-    toolbar->AddTool(ID_RightAlign, wxT("Right Align"), textAlignRightBitmap, wxT("Right align text"));
-    toolbar->AddTool(ID_CenterAlign, wxT("Center Align"), textAlignCenterBitmap, wxT("Center align text"));
-    toolbar->AddTool(ID_Justify, wxT("Justify"), textJustifyBitmap, wxT("Justify text"));
+    toolbar->AddTool(ID_Italic, wxT("Italic"), italicBitmap,
+                     wxT("Italicize text"));
+    toolbar->AddTool(ID_Underline, wxT("Underline"), underlineBitmap,
+                     wxT("Underline text"));
+    toolbar->AddTool(ID_LeftAlign, wxT("Left Align"), textAlignLeftBitmap,
+                     wxT("Left align text"));
+    toolbar->AddTool(ID_RightAlign, wxT("Right Align"), textAlignRightBitmap,
+                     wxT("Right align text"));
+    toolbar->AddTool(ID_CenterAlign, wxT("Center Align"), textAlignCenterBitmap,
+                     wxT("Center align text"));
+    toolbar->AddTool(ID_Justify, wxT("Justify"), textJustifyBitmap,
+                     wxT("Justify text"));
 //    toolbar->AddTool(ID_LineSpacing, wxT("Line Spacing"), bitmap, wxT("Change line spacing"));
     wxArrayString lineSpacingChoices;
     for (double i = 0.5; i <= 2.0; i += 0.1) {
         lineSpacingChoices.Add(wxString::Format("%.1f", i));
     }
-    wxChoice* lineSpacingDropdown = new wxChoice(toolbar, ID_LineSpacing, wxDefaultPosition, wxDefaultSize, lineSpacingChoices);
+    wxChoice *lineSpacingDropdown = new wxChoice(toolbar, ID_LineSpacing,
+                                                 wxDefaultPosition,
+                                                 wxDefaultSize,
+                                                 lineSpacingChoices);
     toolbar->AddControl(lineSpacingDropdown, wxT("Change line spacing"));
-    toolbar->AddTool(ID_Bullet, wxT("Bullet"), listBulletBitmap, wxT("Add bullet"));
+    toolbar->AddTool(ID_Bullet, wxT("Bullet"), listBulletBitmap,
+                     wxT("Add bullet"));
     toolbar->Realize();
 
-    dirCtrl = new wxGenericDirCtrl(this, wxID_ANY, wxGetHomeDir(), wxDefaultPosition, wxSize(200, 600),
+    dirCtrl = new wxGenericDirCtrl(this, wxID_ANY, wxGetHomeDir(),
+                                   wxDefaultPosition, wxSize(200, 600),
                                    wxDIRCTRL_DEFAULT_STYLE | wxSUNKEN_BORDER);
-    dirCtrl->Bind(wxEVT_DIRCTRL_SELECTIONCHANGED, &MyFrame::OnDirItemSelect, this);
+    dirCtrl->Bind(wxEVT_DIRCTRL_SELECTIONCHANGED, &MyFrame::OnDirItemSelect,
+                  this);
     wxBoxSizer *sizer = new wxBoxSizer(wxHORIZONTAL);
     sizer->Add(dirCtrl, 0, wxEXPAND);
     sizer->Add(textCtrl, 1, wxEXPAND);
@@ -160,7 +179,7 @@ void MyFrame::OnBGColor(wxCommandEvent &event) {
 
 void MyFrame::OnBold(wxCommandEvent &event) {
     wxTextAttr style = textCtrl->GetDefaultStyle();
-    if(style.GetFontWeight() != wxFONTWEIGHT_BOLD) {
+    if (style.GetFontWeight() != wxFONTWEIGHT_BOLD) {
         style.SetFontWeight(wxFONTWEIGHT_BOLD);
     } else {
         style.SetFontWeight(wxFONTWEIGHT_NORMAL);
@@ -170,7 +189,7 @@ void MyFrame::OnBold(wxCommandEvent &event) {
 
 void MyFrame::OnItalic(wxCommandEvent &event) {
     wxTextAttr style = textCtrl->GetDefaultStyle();
-    if(style.GetFontStyle() != wxFONTSTYLE_ITALIC) {
+    if (style.GetFontStyle() != wxFONTSTYLE_ITALIC) {
         style.SetFontStyle(wxFONTSTYLE_ITALIC);
     } else {
         style.SetFontStyle(wxFONTSTYLE_NORMAL);
@@ -180,7 +199,7 @@ void MyFrame::OnItalic(wxCommandEvent &event) {
 
 void MyFrame::OnUnderline(wxCommandEvent &event) {
     wxTextAttr style = textCtrl->GetDefaultStyle();
-    if(!style.GetFontUnderlined()) {
+    if (!style.GetFontUnderlined()) {
         style.SetFontUnderlined(true);
     } else {
         style.SetFontUnderlined(false);
@@ -213,7 +232,7 @@ void MyFrame::OnJustify(wxCommandEvent &event) {
 }
 
 void MyFrame::OnLineSpacing(wxCommandEvent &event) {
-    wxChoice* lineSpacingDropdown = (wxChoice*)FindWindow(ID_LineSpacing);
+    wxChoice *lineSpacingDropdown = (wxChoice *) FindWindow(ID_LineSpacing);
     wxString lineSpacingStr = lineSpacingDropdown->GetStringSelection();
     double lineSpacing = wxAtof(lineSpacingStr);
     wxLogMessage("Line spacing changed to: %f", lineSpacing);
@@ -225,7 +244,7 @@ void MyFrame::OnBullet(wxCommandEvent &event) {
 
 void MyFrame::OnDirItemSelect(wxCommandEvent &event) {
     wxString path = dirCtrl->GetPath();
-    if(wxDir::Exists(path)){
+    if (wxDir::Exists(path)) {
         return;
     }
     wxFile file;
@@ -236,4 +255,72 @@ void MyFrame::OnDirItemSelect(wxCommandEvent &event) {
     } else {
         wxLogMessage("Failed to open file: %s", path);
     }
+    wxString extension = GetFileExtension(path);
+    if (extension == "cpp" || extension == "h") {
+        SetupCppLexer();
+    } else if (extension == "py") {
+        SetupPythonLexer();
+    }
+}
+
+void MyFrame::SetupCppLexer() {
+    textCtrl->SetLexer(wxSTC_LEX_CPP);
+    textCtrl->StyleSetFont(wxSTC_STYLE_DEFAULT,
+                           wxFont(10, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL,
+                                  wxFONTWEIGHT_NORMAL));
+    textCtrl->StyleClearAll();
+    textCtrl->StyleSetForeground(wxSTC_C_COMMENT, wxColour(150, 150, 150));
+    textCtrl->StyleSetForeground(wxSTC_C_COMMENTLINE, wxColour(150, 150, 150));
+    textCtrl->StyleSetForeground(wxSTC_C_COMMENTDOC, wxColour(150, 150, 150));
+    textCtrl->StyleSetForeground(wxSTC_C_NUMBER, wxColour(0, 150, 0));
+    textCtrl->StyleSetForeground(wxSTC_C_WORD, wxColour(0, 0, 150));
+    textCtrl->StyleSetForeground(wxSTC_C_STRING, wxColour(150, 0, 0));
+    textCtrl->StyleSetForeground(wxSTC_C_CHARACTER, wxColour(150, 0, 0));
+    textCtrl->StyleSetForeground(wxSTC_C_OPERATOR, wxColour(0, 0, 0));
+}
+
+void MyFrame::SetupPythonLexer() {
+    textCtrl->SetLexer(wxSTC_LEX_PYTHON);
+    textCtrl->StyleSetFont(wxSTC_STYLE_DEFAULT,
+                           wxFont(10, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL,
+                                  wxFONTWEIGHT_NORMAL));
+    textCtrl->StyleClearAll();
+    textCtrl->StyleSetForeground(wxSTC_P_COMMENTLINE, wxColour(150, 150, 150));
+    textCtrl->StyleSetForeground(wxSTC_P_NUMBER, wxColour(0, 150, 0));
+    textCtrl->StyleSetForeground(wxSTC_P_STRING, wxColour(150, 0, 0));
+    textCtrl->StyleSetForeground(wxSTC_P_CHARACTER, wxColour(150, 0, 0));
+    textCtrl->StyleSetForeground(wxSTC_P_WORD, wxColour(0, 0, 150));
+    textCtrl->StyleSetForeground(wxSTC_P_TRIPLE, wxColour(150, 150, 0));
+    textCtrl->StyleSetForeground(wxSTC_P_TRIPLEDOUBLE, wxColour(150, 150, 0));
+    textCtrl->StyleSetForeground(wxSTC_P_CLASSNAME, wxColour(0, 0, 150));
+    textCtrl->StyleSetForeground(wxSTC_P_DEFNAME, wxColour(0, 0, 150));
+    textCtrl->StyleSetForeground(wxSTC_P_OPERATOR, wxColour(0, 0, 0));
+    textCtrl->StyleSetForeground(wxSTC_P_IDENTIFIER, wxColour(0, 0, 0));
+    textCtrl->StyleSetForeground(wxSTC_P_COMMENTBLOCK, wxColour(150, 150, 150));
+    textCtrl->StyleSetForeground(wxSTC_P_STRINGEOL, wxColour(150, 0, 0));
+}
+
+//void MyFrame::OpenFile(wxCommandEvent &event) {
+//    wxFileDialog openFileDialog(this, _("Open file"), "", "",
+//                                "C++ files (*.cpp;*.h)|*.cpp;*.h|Python files (*.py)|*.py",
+//                                wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+//    if (openFileDialog.ShowModal() == wxID_CANCEL) {
+//        return;
+//    }
+//    wxString filePath = openFileDialog.GetPath();
+//    if (!textCtrl->LoadFile(filePath)) {
+//        wxLogError("Cannot open file '%s'.", filePath);
+//        return;
+//    }
+//    wxString extension = GetFileExtension(filePath);
+//    if (extension == "cpp" || extension == "h") {
+//        SetupCppLexer();
+//    } else if (extension == "py") {
+//        SetupPythonLexer();
+//    }
+//}
+
+wxString MyFrame::GetFileExtension(const wxString &fileName) {
+    wxFileName fn(fileName);
+    return fn.GetExt().Lower();
 }

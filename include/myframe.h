@@ -14,13 +14,15 @@
 #include <wx/choice.h>
 #include <wx/dirctrl.h>
 #include <wx/dir.h>
+#include <wx/stc/stc.h>
+#include <wx/filename.h>
 //#include <wx/filepicker.h>
 
 // The frame that contains the main part of the application.
 class MyFrame : public wxFrame {
 public:
     MyFrame();
-    wxRichTextCtrl *textCtrl;
+    wxStyledTextCtrl *textCtrl;
     void OnOpen(wxCommandEvent &event);
     void OnSave(wxCommandEvent &event);
     void OnExit(wxCommandEvent &event);
@@ -53,6 +55,11 @@ public:
         ID_LineSpacing,
         ID_Bullet
     };
+    // Add new methods for lexer setup and file opening
+    void SetupCppLexer();
+    void SetupPythonLexer();
+//    void OpenFile(wxCommandEvent& event);
+    wxString GetFileExtension(const wxString& fileName);
 
 private:
 wxDECLARE_EVENT_TABLE();
