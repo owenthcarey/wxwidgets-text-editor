@@ -12,7 +12,7 @@ find_package(wxWidgets REQUIRED COMPONENTS net core base richtext html xml)
 include(${wxWidgets_USE_FILE})
 
 # Add your executable
-add_executable(wxwidgets_text_editor main.cpp)
+add_executable(wxwidgets_text_editor src/main.cpp src/myapp.cpp include/myapp.h src/myframe.cpp include/myframe.h)
 
 # Link wxWidgets to your target
 target_link_libraries(wxwidgets_text_editor ${wxWidgets_LIBRARIES})

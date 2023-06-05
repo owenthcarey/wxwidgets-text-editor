@@ -1,58 +1,8 @@
-#include <wx/wx.h>
-#include <wx/file.h>
-#include <wx/richtext/richtextctrl.h>
-#include <wx/colourdata.h>
-#include <wx/colordlg.h>
-#include <wx/fontdlg.h>
-#include <wx/choice.h>
+//
+// Created by Owen Carey on 6/4/23.
+//
 
-class MyApp : public wxApp {
-public:
-    bool OnInit() override;
-};
-
-class MyFrame : public wxFrame {
-public:
-    MyFrame();
-    wxRichTextCtrl *textCtrl;
-    void OnOpen(wxCommandEvent &event);
-    void OnSave(wxCommandEvent &event);
-    void OnExit(wxCommandEvent &event);
-    void OnFont(wxCommandEvent &event);
-    void OnColor(wxCommandEvent &event);
-    void OnBGColor(wxCommandEvent &event);
-    void OnBold(wxCommandEvent &event);
-    void OnItalic(wxCommandEvent &event);
-    void OnUnderline(wxCommandEvent &event);
-    void OnLeftAlign(wxCommandEvent &event);
-    void OnRightAlign(wxCommandEvent &event);
-    void OnCenterAlign(wxCommandEvent &event);
-    void OnJustify(wxCommandEvent &event);
-    void OnLineSpacing(wxCommandEvent &event);
-    void OnParagraphSpacing(wxCommandEvent &event);
-    void OnBullet(wxCommandEvent &event);
-    void OnNumber(wxCommandEvent &event);
-    // Define IDs for custom events
-    enum {
-        ID_Font = 101,
-        ID_Color,
-        ID_BGColor,
-        ID_Bold,
-        ID_Italic,
-        ID_Underline,
-        ID_LeftAlign,
-        ID_RightAlign,
-        ID_CenterAlign,
-        ID_Justify,
-        ID_LineSpacing,
-        ID_ParagraphSpacing,
-        ID_Bullet,
-        ID_Number
-    };
-
-private:
-wxDECLARE_EVENT_TABLE();
-};
+#include "../include/myframe.h"
 
 wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
                 EVT_MENU(wxID_OPEN, MyFrame::OnOpen)
@@ -74,15 +24,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
                 EVT_TOOL(ID_Number, MyFrame::OnNumber)
 wxEND_EVENT_TABLE()
 
-// This defines the equivalent of main() for the current platform.
-wxIMPLEMENT_APP(MyApp);
-
-bool MyApp::OnInit() {
-    MyFrame *frame = new MyFrame();
-    frame->Show();
-    return true;
-}
-
+// The constructor for MyFrame.
 MyFrame::MyFrame() : wxFrame(NULL, wxID_ANY, "wxWidgets Text Editor",
                              wxDefaultPosition, wxSize(800, 600)) {
     textCtrl = new wxRichTextCtrl(this, -1, "", wxDefaultPosition, wxDefaultSize,
