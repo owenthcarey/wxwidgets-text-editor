@@ -26,18 +26,18 @@ public:
     void OnOpen(wxCommandEvent &event);
     void OnSave(wxCommandEvent &event);
     void OnExit(wxCommandEvent &event);
-    void OnFont(wxCommandEvent &event);
-    void OnColor(wxCommandEvent &event);
-    void OnBGColor(wxCommandEvent &event);
-    void OnBold(wxCommandEvent &event);
-    void OnItalic(wxCommandEvent &event);
-    void OnUnderline(wxCommandEvent &event);
-    void OnLeftAlign(wxCommandEvent &event);
-    void OnRightAlign(wxCommandEvent &event);
-    void OnCenterAlign(wxCommandEvent &event);
-    void OnJustify(wxCommandEvent &event);
-    void OnLineSpacing(wxCommandEvent &event);
-    void OnBullet(wxCommandEvent &event);
+//    void OnFont(wxCommandEvent &event);
+//    void OnColor(wxCommandEvent &event);
+//    void OnBGColor(wxCommandEvent &event);
+//    void OnBold(wxCommandEvent &event);
+//    void OnItalic(wxCommandEvent &event);
+//    void OnUnderline(wxCommandEvent &event);
+//    void OnLeftAlign(wxCommandEvent &event);
+//    void OnRightAlign(wxCommandEvent &event);
+//    void OnCenterAlign(wxCommandEvent &event);
+//    void OnJustify(wxCommandEvent &event);
+//    void OnLineSpacing(wxCommandEvent &event);
+//    void OnBullet(wxCommandEvent &event);
     wxGenericDirCtrl *dirCtrl;
     void OnDirItemSelect(wxCommandEvent &event);
     // Define IDs for custom events
@@ -58,7 +58,6 @@ public:
     // Add new methods for lexer setup and file opening
     void SetupCppLexer();
     void SetupPythonLexer();
-//    void OpenFile(wxCommandEvent& event);
     wxString GetFileExtension(const wxString& fileName);
 
 private:
