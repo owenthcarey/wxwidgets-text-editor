@@ -16,49 +16,25 @@
 #include <wx/dir.h>
 #include <wx/stc/stc.h>
 #include <wx/filename.h>
-//#include <wx/filepicker.h>
+#include <wx/process.h>  // for wxProcess
+#include <wx/textctrl.h> // for wxTextCtrl
+#include <wx/txtstrm.h>  // for wxTextInputStream
 
-// The frame that contains the main part of the application.
 class MyFrame : public wxFrame {
 public:
     MyFrame();
+    wxGenericDirCtrl *dirCtrl;
     wxStyledTextCtrl *textCtrl;
+    wxTextCtrl *consoleCtrl;
     void OnOpen(wxCommandEvent &event);
     void OnSave(wxCommandEvent &event);
     void OnExit(wxCommandEvent &event);
-//    void OnFont(wxCommandEvent &event);
-//    void OnColor(wxCommandEvent &event);
-//    void OnBGColor(wxCommandEvent &event);
-//    void OnBold(wxCommandEvent &event);
-//    void OnItalic(wxCommandEvent &event);
-//    void OnUnderline(wxCommandEvent &event);
-//    void OnLeftAlign(wxCommandEvent &event);
-//    void OnRightAlign(wxCommandEvent &event);
-//    void OnCenterAlign(wxCommandEvent &event);
-//    void OnJustify(wxCommandEvent &event);
-//    void OnLineSpacing(wxCommandEvent &event);
-//    void OnBullet(wxCommandEvent &event);
-    wxGenericDirCtrl *dirCtrl;
     void OnDirItemSelect(wxCommandEvent &event);
-    // Define IDs for custom events
-    enum {
-        ID_Font = 101,
-        ID_Color,
-        ID_BGColor,
-        ID_Bold,
-        ID_Italic,
-        ID_Underline,
-        ID_LeftAlign,
-        ID_RightAlign,
-        ID_CenterAlign,
-        ID_Justify,
-        ID_LineSpacing,
-        ID_Bullet
-    };
-    // Add new methods for lexer setup and file opening
     void SetupCppLexer();
     void SetupPythonLexer();
     wxString GetFileExtension(const wxString& fileName);
+    void RunCommand(const wxString &command);
+    void OnConsoleEnter(wxCommandEvent &event);
 
 private:
 wxDECLARE_EVENT_TABLE();
