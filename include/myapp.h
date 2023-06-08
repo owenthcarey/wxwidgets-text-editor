@@ -5,8 +5,9 @@
 #ifndef WXWIDGETS_TEXT_EDITOR_MYAPP_H
 #define WXWIDGETS_TEXT_EDITOR_MYAPP_H
 
-#include <wx/wx.h>
 #include "myframe.h"
+
+#include <wx/wx.h>
 
 class MyApp : public wxApp {
 public:

@@ -5,10 +5,10 @@
 #ifndef WXWIDGETS_TEXT_EDITOR_MYFRAME_H
 #define WXWIDGETS_TEXT_EDITOR_MYFRAME_H
 
-#include <wx/wx.h>
-#include <wx/file.h>
-#include <wx/dirctrl.h>
 #include <wx/dir.h>
+#include <wx/dirctrl.h>
+#include <wx/file.h>
+#include <wx/wx.h>
 
 class MyFrame : public wxFrame {
 public:

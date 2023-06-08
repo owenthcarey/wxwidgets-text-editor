@@ -14,14 +14,6 @@ MyFrame::MyFrame() : wxFrame(NULL, wxID_ANY, "wxWidgets Text Editor",
                              wxDefaultPosition, wxSize(800, 600)) {
     textCtrl = new wxTextCtrl(this, wxID_ANY, "", wxDefaultPosition,
                               wxDefaultSize, wxTE_MULTILINE);
-    wxMenu *menuFile = new wxMenu;
-    menuFile->Append(wxID_OPEN, "&Open\tCtrl-O", "Open a file");
-    menuFile->Append(wxID_SAVE, "&Save\tCtrl-S", "Save to a file");
-    menuFile->AppendSeparator();
-    menuFile->Append(wxID_EXIT);
-    wxMenuBar *menuBar = new wxMenuBar;
-    menuBar->Append(menuFile, "&File");
-    SetMenuBar(menuBar);
     dirCtrl = new wxGenericDirCtrl(this, wxID_ANY, wxGetHomeDir(),
                                    wxDefaultPosition, wxSize(200, 600),
                                    wxDIRCTRL_DEFAULT_STYLE | wxSUNKEN_BORDER);
@@ -31,6 +23,14 @@ MyFrame::MyFrame() : wxFrame(NULL, wxID_ANY, "wxWidgets Text Editor",
     h_sizer->Add(dirCtrl, 0, wxEXPAND);
     h_sizer->Add(textCtrl, 1, wxEXPAND);
     SetSizer(h_sizer);
+    wxMenu *menuFile = new wxMenu;
+    menuFile->Append(wxID_OPEN, "&Open\tCtrl-O", "Open a file");
+    menuFile->Append(wxID_SAVE, "&Save\tCtrl-S", "Save to a file");
+    menuFile->AppendSeparator();
+    menuFile->Append(wxID_EXIT);
+    wxMenuBar *menuBar = new wxMenuBar;
+    menuBar->Append(menuFile, "&File");
+    SetMenuBar(menuBar);
 }
 
 void MyFrame::OnOpen(wxCommandEvent &WXUNUSED(event)) {
