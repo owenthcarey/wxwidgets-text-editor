@@ -1,4 +1,4 @@
-#include "../include/myapp.h"
+#include "../include/texteditorapp.h"
 
 // This defines the equivalent of main() for the current platform.
-wxIMPLEMENT_APP(MyApp);
+wxIMPLEMENT_APP(TextEditorApp);
